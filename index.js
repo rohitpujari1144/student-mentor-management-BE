@@ -15,10 +15,10 @@ app.post('/createMentor', async (req, res) => {
         if (!mentor) {
             // console.log(req.body)
             await db.collection("mentorData").insertOne(req.body);
-            res.send({ message: 'New mentor created', data: req.body })
+            res.status(201).send({ message: 'New mentor created', data: req.body })
         }
         else {
-            res.send({ message: `Mentor with ${req.body.mentorEmail} already exist` })
+            res.status(400).send({ message: `Mentor with ${req.body.mentorEmail} already exist` })
         }
     }
     catch (error) {
@@ -37,10 +37,10 @@ app.get('/getAllMentor', async (req, res) => {
         const db = await client.db("Student_Mentor_Management");
         let mentor = await db.collection("mentorData").find().toArray()
         if (mentor.length == 0) {
-            res.send({ message: 'No mentor created yet !' })
+            res.status(404).send({ message: 'No mentor created yet !' })
         }
         else {
-            res.send({ data: mentor })
+            res.status(200).send({ data: mentor })
         }
     }
     catch (error) {
@@ -60,10 +60,10 @@ app.get('/mentorName/:mentorName', async (req, res) => {
         const db = await client.db("Student_Mentor_Management");
         let mentor = await db.collection("mentorData").findOne({ mentorName: req.params.mentorName })
         if (!mentor) {
-            res.send({ message: `No mentor data found associated with mentor name ${req.params.mentorName}` })
+            res.status(404).send({ message: `No mentor data found associated with mentor name ${req.params.mentorName}` })
         }
         else {
-            res.send({ data: mentor })
+            res.status(200).send({ data: mentor })
         }
     }
     catch (error) {
@@ -84,10 +84,10 @@ app.post('/createStudent', async (req, res) => {
         if (!student) {
             // console.log(req.body)
             await db.collection("studentData").insertOne(req.body);
-            res.send({ message: 'New student created successfully', data: req.body })
+            res.status(201).send({ message: 'New student created successfully', data: req.body })
         }
         else {
-            res.send({ message: `Student with ${req.body.studentEmail} already exist` })
+            res.status(400).send({ message: `Student with ${req.body.studentEmail} already exist` })
         }
     }
     catch (error) {
@@ -106,10 +106,10 @@ app.get('/getAllStudents', async (req, res) => {
         const db = await client.db("Student_Mentor_Management");
         let student = await db.collection("studentData").find().toArray()
         if (student.length == 0) {
-            res.send({ message: 'No student created yet !' })
+            res.status(404).send({ message: 'No student created yet !' })
         }
         else {
-            res.send(student)
+            res.status(200).send(student)
         }
     }
     catch (error) {
@@ -129,10 +129,10 @@ app.get('/getStudent/:studentName', async (req, res) => {
         const db = await client.db("Student_Mentor_Management");
         let student = await db.collection("studentData").findOne({ studentName: req.params.studentName })
         if (!student) {
-            res.send({ message: `No student data found associated with student name ${req.params.studentName}` })
+            res.status(404).send({ message: `No student data found associated with student name ${req.params.studentName}` })
         }
         else {
-            res.send({ data: student })
+            res.status(200).send({ data: student })
         }
     }
     catch (error) {
@@ -155,14 +155,14 @@ app.post('/assigningStudent/:mentorName', async (req, res) => {
             if (!studInfo) {
                 await db.collection("Students Assigned Mentor").insertOne({ mentorName: req.params.mentorName, studentName: req.body.studentName, studentEmail: req.body.studentEmail })
                 await db.collection("studentData").deleteOne({studentName: req.body.studentName})
-                res.send({ message: 'Student assigned to mentor', data: req.body })
+                res.status(200).send({ message: 'Student assigned to mentor', data: req.body })
             }
             else {
-                res.send({ message: `${req.body.studentName} already assigned with ${req.params.mentorName}` })
+                res.status(400).send({ message: `${req.body.studentName} already assigned with ${req.params.mentorName}` })
             }
         }
         else {
-            res.send({ message: `No mentor data found associated with mentor name ${req.params.mentorName}` })
+            res.status(400).send({ message: `No mentor data found associated with mentor name ${req.params.mentorName}` })
         }
     }
     catch (error) {
@@ -182,10 +182,10 @@ app.put('/assigningMentor/:studentName', async (req, res) => {
         let student = await db.collection("Students Assigned Mentor").findOne({ studentName: req.params.studentName })
         if (student) {
             await db.collection('Students Assigned Mentor').updateOne({ studentName: req.params.studentName }, { $set: { mentorName: req.body.mentorName } })
-            res.send({ message: `${req.body.mentorName} assigned to ${req.params.studentName}`})
+            res.status(200).send({ message: `${req.body.mentorName} assigned to ${req.params.studentName}`})
         }
         else {
-            res.send({ message: `No student data found associated with student name ${req.params.studentName}` })
+            res.status(404).send({ message: `No student data found associated with student name ${req.params.studentName}` })
         }
     }
     catch (error) {
@@ -205,10 +205,10 @@ app.get('/getStudents/:mentorName', async (req, res) => {
         const db = await client.db("Student_Mentor_Management");
         let mentor = await db.collection("Students Assigned Mentor").find({ mentorName: req.params.mentorName }).toArray()
         if (mentor.length==0) {
-            res.send({ message: `No students assigned to ${req.params.mentorName}` })
+            res.status(400).send({ message: `No students assigned to ${req.params.mentorName}` })
         }
         else {
-            res.send({ data: mentor })
+            res.status(200).send({ data: mentor })
         }
     }
     catch (error) {
