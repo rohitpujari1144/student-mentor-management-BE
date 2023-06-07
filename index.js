@@ -65,6 +65,23 @@ app.post('/createStudent', async (req, res) => {
     }
 })
 
+// getting all students
+app.get('/getStudents', async (req, res) => {
+    const client = await MongoClient.connect(dbUrl);
+    try {
+        const db = await client.db("Student_Mentor_Management");
+        let allStudents = await db.collection("studentData").find().toArray()
+        res.status(200).send({ data: allStudents })
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).send({ message: 'Internal server error', error })
+    }
+    finally {
+        client.close()
+    }
+})
+
 // getting all students with no mentors
 app.get('/getAllStudents', async (req, res) => {
     const client = await MongoClient.connect(dbUrl);
