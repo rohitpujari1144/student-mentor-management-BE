@@ -88,7 +88,7 @@ app.get('/getAllStudents', async (req, res) => {
 })
 
 // assigning mentor to student
-app.put('/assignMentor/:studentEmail', async (req, res) => {
+app.put('/assignMentor/:studentEmailId', async (req, res) => {
     const client = await MongoClient.connect(dbUrl);
     try {
         const db = await client.db("Student_Mentor_Management");
