@@ -135,10 +135,10 @@ app.get('/getAllStudents/:mentorName', async (req, res) => {
             res.status(200).send(student)
         }
     }
-    catch (error) {
-        console.log(error)
-        res.status(500).send({ message: 'Internal server error', error })
-    }
+    // catch (error) {
+    //     console.log(error)
+    //     res.status(500).send({ message: 'Internal server error', error })
+    // }
     finally {
         client.close()
     }
