@@ -92,7 +92,7 @@ app.put('/assignMentor/:studentEmailId', async (req, res) => {
     const client = await MongoClient.connect(dbUrl);
     try {
         const db = await client.db("Student_Mentor_Management");
-        await db.collection("studentData").updateOne({ emailId: req.params.studentEmail }, {$set: req.body})
+        await db.collection("studentData").updateOne({ studentEmailId: req.params.studentEmailId }, {$set: req.body})
         res.status(200).send({ message: 'Mentor assigned to student !' })
 
     }
