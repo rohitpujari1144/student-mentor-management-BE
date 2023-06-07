@@ -3,7 +3,7 @@ const { MongoClient, ObjectId } = require('mongodb')
 const mongodb = require('mongodb')
 const app = express()
 app.use(express.json())
-const dbUrl = 'mongodb://127.0.0.1:27017'
+const dbUrl = 'mongodb+srv://rohit10231:rohitkaranpujari@cluster0.kjynvxt.mongodb.net/?retryWrites=true&w=majority'
 const client = new MongoClient(dbUrl)
 
 // creating new mentor
@@ -30,26 +30,26 @@ app.post('/createMentor', async (req, res) => {
 })
 
 // getting all created mentors
-// app.get('/', async (req, res) => {
-//     const client = await MongoClient.connect(dbUrl);
-//     try {
-//         const db = await client.db("Student_Mentor_Management");
-//         let mentor = await db.collection("mentorData").find().toArray()
-//         if (mentor.length == 0) {
-//             res.status(404).send({ message: 'No mentor created yet !' })
-//         }
-//         else {
-//             res.status(200).send({ data: mentor })
-//         }
-//     }
-//     catch (error) {
-//         console.log(error)
-//         res.status(500).send({ message: 'Internal server error', error })
-//     }
-//     finally {
-//         client.close()
-//     }
-// })
+app.get('/', async (req, res) => {
+    const client = await MongoClient.connect(dbUrl);
+    try {
+        const db = await client.db("Student_Mentor_Management");
+        let mentor = await db.collection("mentorData").find().toArray()
+        if (mentor.length == 0) {
+            res.status(404).send({ message: 'No mentor created yet !' })
+        }
+        else {
+            res.status(200).send({ data: mentor })
+        }
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).send({ message: 'Internal server error', error })
+    }
+    finally {
+        client.close()
+    }
+})
 
 // // getting mentor by name
 // app.get('/mentorName/:mentorName', async (req, res) => {
