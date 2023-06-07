@@ -66,11 +66,11 @@ app.post('/createStudent', async (req, res) => {
 })
 
 // getting all students of a particular mentor
-app.get('/getAllStudents', async (req, res) => {
+app.get('/getAllStudents/:mentorName', async (req, res) => {
     const client = await MongoClient.connect(dbUrl);
     try {
         const db = await client.db("Student_Mentor_Management");
-        let student = await db.collection("studentData").find({assignedMentor:req.body.assignedMentor}).toArray()
+        let student = await db.collection("studentData").find({assignedMentor:req.params.mentorName}).toArray()
         if (student.length == 0) {
             res.status(404).send({ message: 'No student assigned to mentor yet !' })
         }
